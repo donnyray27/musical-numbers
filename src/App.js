@@ -6,8 +6,8 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      changeNote: false,
-      selectedKey: ''
+      selectedKey: 0,
+      dataSet: []
     }
     this.handleNoteChange = this.handleNoteChange.bind(this)
     this.reorderSharps = this.reorderSharps.bind(this)
@@ -15,12 +15,13 @@ class App extends Component {
   }
 
   handleNoteChange(event){
-    let keyChange = event.target.value
+    let keyChange = parseInt(event.target.value)
     let flatKeys = [ 5, 10, 3, 8, 1, 6 ]
     let sharpKeys = [7, 9, 11, 2, 4]
     let majorKeyIndeces = [0, 2, 4, 5, 7, 9, 11]
     this.setState({selectedKey: keyChange})
     let reorderedArray;
+
     if (flatKeys.includes(keyChange)){
       reorderedArray = this.reorderFlats(keyChange)
     }else if (sharpKeys.includes(keyChange)) {
@@ -28,14 +29,14 @@ class App extends Component {
     }else {
       reorderedArray = this.reorderFlats(keyChange)
     }
+
     let filteredNotes = reorderedArray.filter(function(note){
       return(
         majorKeyIndeces.includes(reorderedArray.indexOf(note))
       )
     })
+    this.setState({dataSet: filteredNotes})
     console.log(filteredNotes)
-
-
   }
 
 
@@ -74,6 +75,8 @@ class App extends Component {
       <option key={dropdown.indexOf(option)} value={dropdown.indexOf(option)}>{option}</option>
       )
     })
+
+    let noteTiles;
 
     return (
       <div className="App">
