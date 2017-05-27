@@ -10,23 +10,60 @@ class App extends Component {
       selectedKey: ''
     }
     this.handleNoteChange = this.handleNoteChange.bind(this)
+    this.reorderSharps = this.reorderSharps.bind(this)
+    this.reorderFlats = this.reorderFlats.bind(this)
   }
 
   handleNoteChange(event){
     let keyChange = event.target.value
-    let flatKeys = [ "F", "Bb", "Eb", "Ab", "Db", "Gb" ]
-    let sharpKeys = ["G", "A", "B", "D", "E"]
+    let flatKeys = [ 5, 10, 3, 8, 1, 6 ]
+    let sharpKeys = [7, 9, 11, 2, 4]
+    let majorKeyIndeces = [0, 2, 4, 5, 7, 9, 11]
     this.setState({selectedKey: keyChange})
+    let reorderedArray;
+    if (flatKeys.includes(keyChange)){
+      reorderedArray = this.reorderFlats(keyChange)
+    }else if (sharpKeys.includes(keyChange)) {
+      reorderedArray = this.reorderSharps(keyChange)
+    }else {
+      reorderedArray = this.reorderFlats(keyChange)
+    }
+    let filteredNotes = reorderedArray.filter(function(note){
+      return(
+        majorKeyIndeces.includes(reorderedArray.indexOf(note))
+      )
+    })
+    console.log(filteredNotes)
+
 
   }
-  render() {
+
+
+  reorderSharps(note){
     let sharps = [
       "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
     ]
+    for(let i=0; i < note; i++){
+      let shiftedNote = sharps.shift()
+      sharps.push(shiftedNote)
+    }
+    return sharps
+  }
 
+  reorderFlats(note){
     let flats = [
       "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
     ]
+    for(let i=0; i < note; i++){
+      let shiftedNote = flats.shift()
+      flats.push(shiftedNote)
+    }
+    return flats
+  }
+  render() {
+
+
+
 
     let dropdown = [
       "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"
@@ -34,7 +71,7 @@ class App extends Component {
 
     let options = dropdown.map(option => {
       return(
-      <option key={dropdown.indexOf(option)} value={option}>{option}</option>
+      <option key={dropdown.indexOf(option)} value={dropdown.indexOf(option)}>{option}</option>
       )
     })
 
