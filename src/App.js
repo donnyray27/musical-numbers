@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import DisplayTile from './DisplayTile'
 
 class App extends Component {
   constructor(props){
@@ -76,13 +77,22 @@ class App extends Component {
       )
     })
 
-    let noteTiles;
+    let noteTiles = this.state.dataSet.map(note => {
+      return(
+        <DisplayTile
+          key={this.state.dataSet.indexOf(note)}
+          number={this.state.dataSet.indexOf(note)}
+          value={note}
+          />
+      )
+    })
 
     return (
       <div className="App">
         <select onChange={this.handleNoteChange}>
           {options}
         </select>
+        {noteTiles}
       </div>
     );
   }
